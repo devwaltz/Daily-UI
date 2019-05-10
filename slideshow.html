@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>슬라이드</title>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo:400,700" rel="stylesheet">
+    <style>
+        *{margin:0; padding:0;}
+        body { font: 20px/1.8 'Nanum Myeongjo', serif; padding:0 50px; }
+        .container { overflow:hidden; position:relative; width:100%; background-color: #ffffbf;}
+        li { list-style:none; }
+        .container .slider{ position:absolute; width:100%; }
+        .container .slider.animated{ -webkit-transition:left 0.3s ease-in; transition:left 0.3s ease-in;}
+        .container .slider .slide{ position: absolute; top:50%; transform:translateY(-50%); width:100%; padding:0px 10%; box-sizing:border-box; text-align:center;   }
+        .container .slider .slide blockquote{ font-size:2rem; font-weight:700; word-break:keep-all;} 
+        .container .slider .slide cite{display:inline-block; margin-top:2em; }
+        .container .slider .slide img{ display: none; }
+    
+        
+        .container > a{ position: absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:90px; height:90px; text-indent:-9999px; } 
+        
+        .container > a#btn-prev{ background-image:url(../prototype/images/arrow-left-out.svg); margin-left:-500px }
+        .container > a#btn-next{ background-image:url(../prototype/images/arrow-right-out.svg); margin-left:500px }
+        
+        .container > a#btn-prev:hover{ background-image:url(../prototype/images/arrow-left-over.svg);}
+        .container > a#btn-next:hover{ background-image:url(../prototype/images/arrow-right-over.svg);}
+        
+        #btn-prev.disabled, 
+        #btn-next.disabled { display:none; }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <ul class="slider">
+            <li class="slide">
+                <img src="#" alt="image-1">
+                <blockquote>매일 작업하지 않고 피아노나 노래를 배울 수 있습니까.<br/>어쩌다 한 번으로 얻을 수 있는 것은 결코 없습니다.</blockquote>
+                <cite>레프 톨스토이</cite>
+            </li>
+            <li class="slide">
+                <img src="#" alt="image-2">
+                <blockquote>새 비료를 뿌리기 보다는 매일 조금씩 땅을 다져라.</blockquote>
+                <cite>헨리 밀러</cite>
+            </li>
+            <li class="slide">
+                <img src="#" alt="image-3">
+                <blockquote>행동하는 자만이 배우기 마련이다.</blockquote>
+                <cite>프리드리히 니체</cite>
+            </li>
+            <li class="slide">
+                <img src="#" alt="image-4">
+                <blockquote>시간은 수학적 단위가 아니라 감수성의 의미론적 분할이다.</blockquote>
+                <cite>롤랑 바르트</cite>
+            </li>
+            <li class="slide">
+                <img src="#" alt="image-5">
+                <blockquote>글쓰기에는 어떤 것도 운 좋게 찾아오지 않는다.<br/>글쓰기는 어떠한 속임수도 허용하지 않는다.<br/>모든 문장은 기나긴 수련의 결과이다.</blockquote>
+                <cite>헨리 데이비드 소로</cite>
+            </li>
+            <li class="slide">
+                <img src="#" alt="image-6">
+                <blockquote>내 안에 파고들지 않는 정보는 앎이 아니며 낡은 나를 넘어뜨리고<br/>다른 나, 타자로서의 나로 변화시키지 않는 만남은 체험이 아니다.</blockquote>
+                <cite>황현산</cite>
+            </li>
+        </ul>
+        
+        <a href="#" id="btn-prev">이전</a>
+        <a href="#" id="btn-next">다음</a>
+    </div>
+    
+    <script>
+        
+    //변수 지정 
+        var sliderWrapper = document.getElementsByClassName('container'),
+            slider = document.getElementsByClassName('slider'),
+            slides = document.getElementsByClassName('slide'),
+            slideCount = slides.length, 
+            currentIndex = 0, //현재 보고 있는 것
+            topHeight = 0, //li.slide중에 가장 높은 걸 가져와서 부모의 높이로 지정
+            navPrev = document.getElementById('btn-prev'),
+            navNext = document.getElementById('btn-next');
+        
+    //슬라이드의 높이 확인하여 부모의 높이로 지정하기
+        
+        /*topHeight = slides[3].offsetHeight;
+        console.log(topHeight);// 배열로 나오기 때문에 반복문이 필요하다.*/
+        
+        function calculateTallestSlide(){
+            /*
+            for(시작; 끝값(조건); 증감){
+                실제로 반복할 일
+            }
+            */
+            for(var i = 0; i < slideCount; i++){
+                if(slides[i].offsetHeight > topHeight){ //처음값 topHeight = 0부터 시작해서 계속 큰 값이 topHeight 저장
+                    topHeight = slides[i].offsetHeight;
+                }
+            }
+            sliderWrapper[0].style.height = topHeight + 'px';
+            slider[0].style.height = topHeight + 'px';
+        }
+        
+        calculateTallestSlide();
+        
+    //slide를 가로로 배열하기
+        for(var i = 0; i < slideCount; i++ ){
+            slides[i].style.left = i*100 + '%';
+        }
+    //slider 슬라이드 이동 함수
+        function goToSlide(idx){
+            slider[0].style.left = -100 * idx +'%';
+            currentIndex = idx;
+            slider[0].classList.add('animated');
+            
+            //updateNav();
+        }
+    //goToSlide(4) 확인;
+        
+    //버튼을 클릭하면 슬라이드 이동시키기 
+        navPrev.addEventListener('click',function(e){
+            e.preventDefault; //a태그의 본래 기능(링크)을 없애줌
+            //goToSlide(currentIndex - 1);
+            
+            //처음이 아니라면 이전이전 이동, 처음이면 마지막으로 가기
+            if(currentIndex > 0){
+                goToSlide(currentIndex - 1);
+            }else{
+               goToSlide(slideCount - 1);
+            }
+            
+        });
+        navNext.addEventListener('click',function(e){
+            e.preventDefault;
+            //goToSlide(currentIndex + 1);
+            if(currentIndex < slideCount - 1){
+                goToSlide(currentIndex + 1);
+            }else{
+               goToSlide(0);
+            }
+        });
+        
+    //버튼기능 없데이트 슬라이드가 처음인지 마지막인지 구분해서 버튼 없애기
+        function updateNav(){
+            if(currentIndex == 0){
+                navPrev.classList.add('disabled');
+            }else{
+                navPrev.classList.remove('disabled');
+            }
+            if(currentIndex == slideCount - 1){
+                navNext.classList.add('disabled');
+            }else{
+                navNext.classList.remove('disabled');
+            }
+        }
+    //첫번째 슬라이드 먼저 보이도록 하기 - 이유는 처음 열자마자 이전 버튼이 나오기 때문에
+        goToSlide(0);
+        
+    //계속 롤링되게 마지막이 나오면 처음으로 가기 133줄
+        
+        
+        
+    </script>
+</body>
+</html>
