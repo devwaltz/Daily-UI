@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>아코디언 자바스크립트</title>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style>
+        *{margin:0; padding:0;}
+
+        .container{ margin:0 auto; width:90%; height:700px; padding: 50px; background-color:#d5fdd5;   } 
+        .container .panel-box{ margin-bottom:20px; }
+        .container .panel-box div{ border:1px solid #333;}
+        .container .panel-box .panel-head{ margin-bottom:20px; padding:15px 20px; font-weight:bold; cursor:pointer; }
+        .container .panel-box .panel-body{ padding:20px; line-height:1.8; background-color:#fff;  }
+    
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="panel-box active">
+       <div class="panel-head">Q Lorem ipsum dolor sit? </div>
+       <div class="panel-body">A Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad aliquid voluptate fugit quaerat non molestiae quo magni soluta minima corporis! Soluta, ipsa et. Quos quibusdam, nesciunt totam ullam quasi neque!</div>
+    </div>
+    <div class="panel-box">
+       <div class="panel-head">Q Lorem ipsum dolor sit? </div>
+       <div class="panel-body">A Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad aliquid voluptate fugit quaerat non molestiae quo magni soluta minima corporis! Soluta, ipsa et. Quos quibusdam, nesciunt totam ullam quasi neque!</div>
+    </div>
+    <div class="panel-box">
+       <div class="panel-head">Q Lorem ipsum dolor sit? </div>
+       <div class="panel-body">A Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad aliquid voluptate fugit quaerat non molestiae quo magni soluta minima corporis! Soluta, ipsa et. Quos quibusdam, nesciunt totam ullam quasi neque!</div>
+    </div>
+</div>
+   
+<script>
+    $(function(){
+        var question = document.getElementsByClassName('panel-box'), 
+            heading = document.getElementsByClassName('panel-head'),
+            answer = document.getElementsByClassName('panel-body');
+        
+        //제목을 클릭하면 할일 heading[0],heading[2] 배열로 들어온다. 
+        //for(시간;조건;증감){}
+        for(var i = 0; i < heading.length; i++){ //헤딩들 마다 할일
+            heading[i].addEventListener('click',function(e){
+                //question.classList.remove('active'); 배열로 들어오기 때문에 반복문으로 작성해야 한다.
+                for(var q = 0; q<question.length; q++){
+                    question[q].classList.remove('active');
+                    e.target.parentNode.classList.add('active');
+                    activateBody(); //함수
+                    
+                    
+                }//question 마다 할일
+            });  
+        }
+        function activateBody(){
+            //panel-body 모두 안보이도록 answer, display:none;
+            for(var a = 0; a<answer.length; a++){
+                answer[a].style.display ='none';
+            }
+            //클래스명 active panel-question 자식중 panel-body 나타나도록
+            //.panel-question.active .panel-body
+            var activePanel = document.querySelectorAll('.panel-box.active .panel-body');
+            activePanel[0].style.display = 'block';
+            
+            /*var activePanel = document.querySelector('.panel-box.active .panel-body');
+            activePanel.style.display = 'block'; 가능 */
+        }
+        
+        activateBody();
+        
+        //모든 answer 안보이도록
+        for(var a = 0; a<answer.length; a++){
+            answer[a].style.display ='none';
+        }
+        
+    });
+    
+</script>
+    
+</body>
+</html>
