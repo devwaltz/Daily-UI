@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>배경 이미지 패럴렉스</title>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <style>
+        *{margin:0; padding:0;}
+        
+        .container{ height:4000px; }
+        .container .main-bg{ opacity:0; z-index:-1; position:fixed; top:0; left:0; width:100%; height:100%;  transition:opacity 0.5s ease-out; }
+        .container .main-bg.active{ opacity:1;}
+        
+        .container #section-1{ background: url(../prototype/images/bg-cover-01.jpg) no-repeat center center; background-attachment:fixed; background-size:cover;}
+        .container #section-2{ background: url(../prototype/images/bg-cover-02.jpg) no-repeat center center; background-attachment:fixed; background-size:cover;}
+        .container #section-3{ background: url(../prototype/images/fx.png) no-repeat center center; background-attachment:fixed; background-size:cover; }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-bg" id="section-1"></div>
+        <div class="main-bg" id="section-2"></div>
+        <div class="main-bg" id="section-3"></div>    
+    </div>
+    
+    
+    <script>
+        $(function(){
+            //화면 위치에 따른 구현 
+            //1 . scroll 이벤트
+            var t = 0
+            var timer = 0; 
+            var startFlag=false;
+            
+            $('body, html').animate({scrollTop:0},300,function(){
+                startFlag=true;
+                $(window).trigger('scroll');
+            });
+            
+            $(window).scroll(function(){
+                clearTimeout(timer); 
+                
+                if(startFlag == false){
+                    return false;
+                }
+            //2. timer 생성 스크롤탑 값은 계속 구하는 것 때문에   
+                timer = setTimeout(function(){
+                    t = $(window).scrollTop();
+                    //console.log(t);
+                    
+                    //1000,2500
+
+                    if(t <= 700){
+                        //console.log("1 섹션");
+                        $('.main-bg').removeClass('active');
+                        $('#section-1').addClass('active');
+                    }else if(t <=1400){
+                        //console.log("2 섹션");
+                        $('.main-bg').removeClass('active');
+                        $('#section-2').addClass('active');
+                    }else if(t < $('body').height()){
+                        //console.log("3 섹션");
+                        $('.main-bg').removeClass('active');
+                        $('#section-3').addClass('active');
+                    }
+                    
+                    
+                },50);
+                
+                
+            });
+            
+            
+            
+        });
+    
+    </script>
+</body>
+</html>
