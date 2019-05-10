@@ -1,0 +1,6 @@
+*{margin:0; padding:0;}
+
+.container{ margin:0 auto; width:90%; height:700px; padding: 50px; background-color:#d5fdd5;   } 
+.container .panel-box{ margin-bottom:20px; } 
+.container .panel-box .panel-head{ padding:20px; font-weight:bold; cursor:pointer; }
+.container .panel-box .panel-body{ padding:20px; line-height:1.8; }
